@@ -1,0 +1,27 @@
+int findShortestSubArray(int* nums, int numsSize){
+    int mark[50000]={0},start[50000]={0},end[500000]={0};
+    int i;
+    int count=0,min;
+    for(i=0;i<numsSize;i++)
+    {
+        mark[nums[i]]++;
+        if(mark[nums[i]]>count)
+        count=mark[nums[i]];//记下最大的度
+        if(mark[nums[i]]==1)//第一次出现，设置起点
+        {
+            start[nums[i]]=i;
+            end[nums[i]]=i;
+        }
+        else if(mark[nums[i]]>1)//非第一次出现
+        end[nums[i]]=i;
+    }
+    min=50000;//寻找最大
+    for(i=0;i<50000;i++)
+    {
+        if(mark[i]==count)
+            if(end[i]-start[i]<min)
+                min=end[i]-start[i];
+    }
+        min++;
+    return min;
+}
