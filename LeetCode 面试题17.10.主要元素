@@ -1,0 +1,23 @@
+/*排序，数组最中间的元素出现次数超过数组长度的一半，为真返回这个元素，否则返回-1.*/
+int comp(const void *a,const void *b){
+    return *(int *)a-*(int *)b;
+}
+int majorityElement(int* nums, int numsSize){
+    qsort(nums,numsSize,sizeof(int),comp);
+    int cnt=0,i=0,tmp=nums[numsSize/2];
+    for(i=0;i<numsSize;i++)
+    {
+        if(nums[i]==tmp)
+        {
+            cnt++;
+        }
+    }
+    if(cnt>numsSize/2)
+    {
+        return tmp;
+    }
+    else
+    {
+        return -1;
+    }
+}
