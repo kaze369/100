@@ -1,0 +1,28 @@
+int minDays(int* bloomDay, int bloomDaySize, int m, int k){
+    if (bloomDay == NULL && bloomDaySize == 0){
+        return -1;       //传参检查
+    }
+    if ((m*k) > bloomDaySize){    //花朵不够
+    }
+    int left = 1;//1 <= bloomDay[i] <= 10^9
+    int right = 1000000000;       // int 范围: -2^(31) ~ 2^(31)-1
+    while (left <= right){
+        int mid = (left + right)/2;
+        int num = 0;  //花朵数
+        int size = 0;    //花束数
+        for (int i = 0; i < bloomDaySize; ++i){           //遍历数组
+            num = (bloomDay[i] <= mid) ? (num+1) : 0;          //相邻的花朵数
+            if (num >= k){      //相邻的花朵数大于 k 朵时，构成一束花
+                ++size;
+                num = 0;//已摘除这相邻的 k 朵花
+            }
+        }
+        if (size >= m){         //满足 m 束花
+            right = mid - 1;    //在左半区间
+        }
+        else{
+            left = mid + 1;     //在右半区间
+        }
+    }
+    return left;
+}
