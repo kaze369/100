@@ -1,0 +1,46 @@
+/*给定两个数组，编写一个函数来计算它们的交集。
+示例 1：
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2,2]*/
+
+/*先分别对两个数组进行排序，然后使用双指针法，小的那一方指针位置++，相同就都++*/
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+
+#define min(a,b)  ((a < b) ? (a) : (b))
+
+
+int cmpfunc (const void * a, const void * b)
+{
+   if(*(int*)a > *(int*)b)
+    return 1;
+    else
+    return -1;
+}
+
+
+int* intersect(int* nums1, int nums1Size, int* nums2, int nums2Size, int* returnSize){
+
+    int *ret,n = 0,m = 0;
+    *returnSize = 0;
+    qsort(nums1,nums1Size,sizeof(int),cmpfunc);
+    qsort(nums2,nums2Size,sizeof(int),cmpfunc);
+
+    ret = (int*)malloc(sizeof(int) * min(nums1Size, nums2Size));
+
+    while((n < nums1Size) && (m < nums2Size))
+    {
+        if(nums1[n] > nums2[m])
+            m++;
+        else if(nums1[n] < nums2[m])
+            n++;
+        else
+        {
+            ret[(*returnSize)++] = nums1[n];
+            n++;
+            m++;
+        }
+    }
+    return ret;
+}
