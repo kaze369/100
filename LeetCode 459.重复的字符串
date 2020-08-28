@@ -1,0 +1,34 @@
+bool repeatedSubstr(char *s, int len, int sublen){
+    int times = len/sublen;
+    
+    if(times == 2){     //2倍长度,直接判断
+        for(int i = 0; i < sublen; i++){
+            if(s[i] != s[sublen + i]){
+                return false;
+            }
+        }
+        return true;
+    }else{
+        for(int i = 0; i < sublen; i++){
+            if(s[i] != s[len - sublen + i]){
+                return false;
+            }
+        }
+        return repeatedSubstr(s, len - sublen, sublen);  // 逐步递归,一点点减小长度直到2倍
+    }
+}
+
+bool repeatedSubstringPattern(char * s){
+    int n = strlen(s);
+    if(n < 2){
+        return false;
+    }
+    for(int i = 1; i <= n/2; i++){
+        if(n%i == 0){
+            if(repeatedSubstr(s, n, i)){
+                return true;
+            }
+        }
+    }
+    return false;
+}
