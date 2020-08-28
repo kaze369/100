@@ -1,0 +1,14 @@
+int countSegments(char * s){
+    /* 空则返回0 */
+    if ( strlen(s) == 0 || s == NULL )
+        return 0;
+    /* 分割字符串，统计分割次数 */
+    int tot = 0;
+    char *str = strtok( s, " ");  /* 首次传入s */
+    while ( str != NULL )
+    {
+        tot++;
+        str = strtok( NULL, " " );/* 之后传入NULL */
+    }
+    return tot;
+}
