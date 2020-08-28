@@ -1,0 +1,97 @@
+/*给定一个包含正整数、加(+)、减(-)、乘(*)、除(/)的算数表达式(括号除外)，计算其结果。
+表达式仅包含非负整数，+， - ，*，/ 四种运算符和空格  。 整数除法仅保留整数部分。
+示例 1:
+输入: "3+2*2"
+输出: 7*/
+
+#define MAXSTACKSIZE 1000
+int calculate(char* s){
+    int nums[MAXSTACKSIZE] = {0};
+    char operators[MAXSTACKSIZE] = {0};
+    int numsIndex = 0;
+    int opIndex = 0;
+    int temp = 0;
+    int len = strlen(s);
+    char *guard = s;
+    int ret = 0;
+    while (*guard != '\0'){
+        // printf("%c", *guard);
+        // guard++;
+        if (*guard == ' '){
+            guard++;
+            continue;
+        }
+        if (*guard >= '0' && *guard <= '9'){
+            temp = 0;
+            while(*guard >= '0' && *guard <= '9'){
+                temp = temp * 10 + (*guard - '0');
+                guard++;
+            }
+            nums[numsIndex++] = temp;
+            temp = 0;
+        }
+        if (*guard == '*'){
+            guard++;
+            while (*guard == ' '){
+                guard++;
+            }
+            while(*guard >= '0' && *guard <= '9'){
+                temp = temp * 10 + (*guard - '0');
+                guard++;
+            }
+            temp = nums[numsIndex - 1] * temp;
+            nums[numsIndex - 1] = temp;
+            temp = 0;            
+        }
+        if (*guard == '/'){
+            guard++;
+            while (*guard == ' '){
+                guard++;
+            }
+            while(*guard >= '0' && *guard <= '9'){
+                temp = temp * 10 + (*guard - '0');
+                guard++;
+            }
+            temp = nums[numsIndex - 1] / temp;
+            nums[numsIndex - 1] = temp;
+            temp = 0;            
+        }
+        if (*guard == '+' || *guard == '-'){
+            if (opIndex == 0){
+                operators[opIndex++] = *guard;
+                guard++;
+                continue;
+            }
+            else{
+                opIndex--;
+                if (operators[opIndex] == '+'){
+                    temp = nums[numsIndex - 2] + nums[numsIndex - 1];
+                    nums[numsIndex - 2] = temp;
+                    numsIndex--;
+                    temp = 0;
+                }
+                else if (operators[opIndex] == '-'){
+                    temp = nums[numsIndex - 2] - nums[numsIndex - 1];
+                    nums[numsIndex - 2] = temp;
+                    numsIndex--;
+                    temp = 0;
+                }
+                operators[opIndex++] = (*guard);
+                guard++;
+            }
+        }
+    }
+    while (opIndex != 0){
+        opIndex--;
+        if (operators[opIndex] == '+'){
+            nums[numsIndex -2] = nums[numsIndex - 2] + nums[numsIndex - 1];
+            numsIndex --;
+        }
+        else if (operators){
+            nums[numsIndex -2] =  nums[numsIndex - 2] - nums[numsIndex - 1];
+            numsIndex--;
+        }
+    }
+    ret = nums[numsIndex-1];
+    return ret;
+}
