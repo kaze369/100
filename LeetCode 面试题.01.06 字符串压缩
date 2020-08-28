@@ -1,0 +1,28 @@
+/*字符串压缩。利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a2b1c5a3。若“压缩”后的字符串没有变短，则返回原先的字符串。你可以假设字符串中只包含大小写英文字母（a至z）。
+示例1:
+输入："aabcccccaaa"
+输出："a2b1c5a3"*/
+
+char* compressString(char* S){
+    int len=strlen(S);
+    if(len==1||len==2) return S;
+    char *res=(char*)malloc(sizeof(char)*(2*len));
+    int i,j,k=0;
+    for(i=j=0;i<len;){
+        res[k++]=S[i];
+        while(j<len&&S[i]==S[j])j++;
+        int temp=j-i;   //计算字符个数
+        int c=log10(temp)+1;    //计算位数
+        k=k+c-1;
+        while(temp){
+            res[k--]=temp%10+'0';   //从个位开始赋值
+            temp/=10;
+        }
+        k=k+c+1;    //重新定位k
+        i=j;
+    }
+    res[k]='\0';
+    int len_res=strlen(res);
+    if(len_res<len) return res;
+    return S;
+}
