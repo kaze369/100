@@ -1,0 +1,24 @@
+/*快慢指针，快指针先走k步，两个指针同步走，当快指针走到空时，慢指针走到倒数第k个结点*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* getKthFromEnd(struct ListNode* head, int k){
+    struct ListNode*f=head,*s=head;//定义快慢指针
+    if(head==NULL)
+    return head;
+    while(k!=0)
+    {
+        f=f->next;//快指针走k步
+        k--;
+    }
+    while(f!=NULL) //快慢指针同步走
+    {
+        s=s->next;
+        f=f->next;
+    }
+    return s;
+}
