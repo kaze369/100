@@ -1,0 +1,51 @@
+int Cmp(const void* a, const void* b)
+{
+    if (*(char*)a > *(char*)b) {
+        return 1;
+    }
+    if (*(char*)a < *(char*)b) {
+        return -1;
+    }
+    return 0;
+}
+int Cmp1(const void* a, const void* b)
+{
+    return *(int*)b - *(int*)a;
+}
+int F(char* s) {
+    qsort(s, strlen(s), sizeof(char), Cmp);
+    char tag = s[0];
+    int count = 0;
+    for (int i = 0; i < strlen(s); i++) {
+        if (s[i] == tag) {
+            count++;
+        }
+    }
+    return count;
+}
+int* numSmallerByFrequency(char ** queries, int queriesSize, char ** words, int wordsSize, int* returnSize)
+{
+    *returnSize = queriesSize;
+    int* ret = (int*)malloc(*returnSize * sizeof(int));
+    int queries_f[2000];
+    int words_f[2000];
+    for (int i = 0; i < queriesSize; i++) {
+        queries_f[i] = F(queries[i]);
+    }
+    for (int i = 0; i < wordsSize; i++) {
+        words_f[i] = F(words[i]);
+    }
+    qsort(words_f, wordsSize, sizeof(int), Cmp1);
+    for (int i = 0; i < queriesSize; i++) {
+        int count = 0;
+        for (int j = 0; j < wordsSize; j++) {
+            if (words_f[j] > queries_f[i]) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        ret[i] = count;
+    }
+    return ret;
+}
