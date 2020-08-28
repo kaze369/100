@@ -1,0 +1,17 @@
+char *destCity(char ***paths, int pathsSize, int *pathsColSize)
+{
+    int i, j;
+    int flag;            // 是否终点城市标记
+
+    for (i = 0; i < pathsSize; i++) {
+        flag = 0;
+        for (j = 0; j < pathsSize; j++) {
+            if (strcmp(paths[i][1], paths[j][0]) == 0) {
+                flag = 1; // 标记为1，表示在起点城市中可以找到
+            }
+        }
+        if (flag == 0)
+            return paths[i][1];
+    }
+    return NULL;
+}
