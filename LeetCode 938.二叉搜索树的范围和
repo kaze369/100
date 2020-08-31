@@ -1,0 +1,27 @@
+/*给定二叉搜索树的根结点 root，返回 L 和 R（含）之间的所有结点的值的和。
+二叉搜索树保证具有唯一的值。
+示例 1：
+输入：root = [10,5,15,3,7,null,18], L = 7, R = 15
+输出：32*/
+
+/*将一个结点的左子树和右子树分别看成一个整体，整棵树大于L小于R的总和等于左子树中的总和加上右子树中的总和，
+再判断根节点的值是否处于范围内，若处在L与R之间，则将其加在总和内。递归结束条件为遇到空节点，直接向上返回0，表示不对总和产生影响。*/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+
+
+int rangeSumBST(struct TreeNode* root, int L, int R){
+    if(root == NULL)
+        return 0;
+    int sum = rangeSumBST(root ->left,L,R) + rangeSumBST (root -> right,L,R);
+    if(root ->val <= R && root ->val >= L)
+        sum += root ->val;
+    return sum;
+
+}
