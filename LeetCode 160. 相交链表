@@ -1,0 +1,27 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+//1,链表 headA 长度为 la ， 链表 headB 程度为 lb
+//2, pA 走到尾之后，指向 headB , 总共走 la + lb 步
+//3, pB 走到尾之后，指向 headA , 总共走 lb + la 步
+//4, 如果两链表相交，有 n 个相同的节点，那么 pA 和 pB 肯定是一起走完最后 n 个点
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+    struct ListNode*    pA  = headA;
+    struct ListNode*    pB  = headB;
+    if((NULL == headA) || (NULL == headB)) return NULL;
+    while(pA != pB)
+    {
+        pA = pA->next;
+        pB = pB->next;
+        if((NULL == pA) && (NULL == pB)) return NULL;
+        if(NULL == pA)
+            pA = headB;
+        if(NULL == pB)
+            pB = headA;
+    }
+    return pA;
+}
