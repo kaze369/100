@@ -1,0 +1,113 @@
+//定义四个方向的单步，从向上走，顺时针方向
+int g_dirX[4] ={0, 1, 0, -1};
+int g_dirY[4] ={1, 0, -1, 0};
+int max = 0;//最大欧式距离平方，即坐标和原点差值的平方和，比如(x - 0)^2 + (y - 0)^0
+int curDir = 0; //当前方向，方向共有4种：0、1、2、3分别代表向上，向右，向下，向左
+int curX = 0, curY = 0;
+int **obs = NULL;
+int obsSize = 0;
+
+int absNum(int num){
+    return (num > 0)?num:(0 - num);
+}
+//计算到下一个坐标中间是否有障碍物，若有则只能到达障碍物前一个位置
+void goNewLocation(int nextX, int nextY){
+    int tmpx = curX;
+    int tmpy = curY;
+    int obsFind = 0;
+    for(int i = 0; i < obsSize; i++){
+        if(curDir == 3){
+            if(curY != obs[i][1]){
+                continue;
+            }
+            else if(curX > obs[i][0] && nextX <= obs[i][0]){
+                curX = obs[i][0] + 1;
+                obsFind = 1;
+				break;
+            }
+        }
+        else if(curDir == 2){
+            if(curX != obs[i][0]){
+                continue;
+            }
+            else if(curY > obs[i][1] && nextY <= obs[i][1]){
+                curY = obs[i][1] + 1;
+                obsFind = 1;
+                break;
+            }
+        }
+        else if(curDir == 1){
+            if(curY != obs[i][1]){
+                continue;
+            }
+            else if(curX < obs[i][0] && nextX >= obs[i][0]){
+                curX = obs[i][0] - 1;
+                obsFind = 1;
+                break;
+            }
+        }
+        else if(curDir == 0){
+            if(curX != obs[i][0]){
+                continue;
+            }
+            else if(curY < obs[i][1] && nextY >= obs[i][1]){
+                curY = obs[i][1] - 1;
+                obsFind = 1;
+                break;
+            }
+        }
+    }
+    
+    //若新的坐标比当前坐标靠后，则重新计算欧式距离并比大小;若靠前也已经刷新坐标
+    //if(absNum(curX) > absNum(tmpx) || absNum(curY) > absNum(tmpy)){
+    //    ;
+    //}
+    //else 
+    if(obsFind == 0){
+        curX = nextX;
+        curY = nextY;
+    }
+    //printf("curDir=%d oldx=%d oldy=%d curX=%d curY=%d\n", curDir, tmpx, tmpy, curX, curY);
+    int tmpSum = curX * curX + curY * curY;
+    max = (max > tmpSum)?max:tmpSum;
+    //printf("curDis=%d max=%d\n", tmpSum, max);
+}
+
+void StepNext(int stepsOrDir){
+    //printf("curDir=%d curX=%d curY=%d stepsOrDir=%d\n", curDir, curX, curY, stepsOrDir);
+    if(stepsOrDir == -2){
+        //向左转，则dir数组下标-1，注意是否越界
+        if(--curDir < 0){
+            curDir = 3;
+        }
+    }
+    else if(stepsOrDir == -1){
+        if(++curDir > 3){
+            curDir = 0;
+        }
+    }
+    else{
+        
+        int nextX = curX + g_dirX[curDir] * stepsOrDir;
+        int nextY = curY + g_dirY[curDir] * stepsOrDir;
+        //printf("curDir=%d nextX=%d nextY=%d\n", curDir, nextX, nextY);
+        goNewLocation(nextX, nextY);
+    }
+}
+
+int robotSim(int* commands, int commandsSize, int** obstacles, int obstaclesSize, int* obstaclesColSize){
+    if(commandsSize <= 0 || !commands || !obstacles || !obstaclesColSize){
+        return 0;
+    }
+    obs = obstacles;
+    obsSize = obstaclesSize;
+    max = 0;
+    curDir = 0;
+    curX = 0;
+    curY = 0;
+
+    for(int j = 0; j < commandsSize; j ++){
+        StepNext(commands[j]);
+    }
+    return max;
+}
