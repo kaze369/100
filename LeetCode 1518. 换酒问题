@@ -1,0 +1,8 @@
+/*递归*/
+int numWaterBottles(int numBottles, int numExchange)
+{
+    if (numBottles < numExchange)
+        return numBottles;
+    else
+        return numWaterBottles((numBottles / numExchange) + (numBottles % numExchange), numExchange) + numBottles - numBottles % numExchange;
+}
