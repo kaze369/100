@@ -1,0 +1,51 @@
+/*先分别求出两个链表的各自长度,让长度长的链表先向前移动差值长度,两个链表一起移动，直到找到相等返回
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+
+int get_length(struct ListNode *head)
+{
+    int lenght = 0;
+    struct ListNode *p = head;
+
+    while (p != NULL) {
+        lenght++;
+        p = p->next;
+    }
+
+    return lenght;
+}
+
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB)
+{
+    struct ListNode *p = headA;
+    struct ListNode *q = headB;
+
+    int lenA = get_length(headA);
+    int lenB = get_length(headB);
+
+    int i = 0;
+    if (lenA < lenB) {
+        while (i < abs(lenA - lenB)) {
+            q = q->next;
+            i++;
+        }
+    } else {
+        while (i < abs(lenA - lenB)) {
+            p = p->next;
+            i++;
+        }
+    }
+
+    while (p != NULL && q != NULL && p != q) {
+        p = p->next;
+        q = q->next;
+    }
+
+    return p;
+}
