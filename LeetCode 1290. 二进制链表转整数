@@ -1,0 +1,28 @@
+/*设置一个计数器，首先遍历整个链表，通过计数器的值知道有多少节点。
+然后重新遍历链表，二进制转换十进制，根据之前的计数器的值作为各权位的幂，然后就可以求出十进制的值了*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+int getDecimalValue(struct ListNode* head){
+    int j=0;
+    int sum=0;
+    struct ListNode *p;
+    p=head;
+    while(p!=NULL)
+    {
+        p=p->next;
+        j++;
+    }
+    p=head;
+    while(p!=NULL&&j>0)
+    {
+        sum+=((p->val)*pow(2,j-1));
+        j--;
+        p=p->next;
+    }
+    return sum;
+}
